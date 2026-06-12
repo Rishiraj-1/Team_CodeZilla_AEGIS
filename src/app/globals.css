@@ -1,49 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Source+Code+Pro:ital,wght@0,300;0,400;0,500&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* === EXTRACTED FROM GLOBE === */
+  /* These are the globe's own colors. UI uses same palette = visual unity. */
+
+  /* Backgrounds — warm near-black (brown undertone matches earth-night.jpg) */
+  --bg:       #06050a;   /* Page — matches space behind globe */
+  --bg-1:     #0c0b10;   /* Panels */
+  --bg-2:     #131118;   /* Elevated / hover */
+  --bg-3:     #1a1920;   /* Selected / active */
+
+  /* Borders — very subtle warm structure */
+  --b0:  rgba(255, 194, 0, 0.04);  /* Hairline */
+  --b1:  rgba(255, 194, 0, 0.08);  /* Normal border */
+  --b2:  rgba(255, 194, 0, 0.16);  /* Emphasized */
+  --b3:  rgba(255, 194, 0, 0.30);  /* Active / focused */
+
+  /* Text — warm hierarchy (NOT cool white) */
+  --t0:  #ede0c4;   /* Primary — warm cream (slightly brighter for contrast) */
+  --t1:  #c0a870;   /* Secondary (more contrast for secondary text) */
+  --t2:  #5a5040;   /* Tertiary */
+  --t3:  #2e2820;   /* Ghost */
+
+  /* === GLOBE ACCENT COLORS — used in UI too === */
+  --gold:       #ffc200;   /* Globe atmosphere → UI primary accent */
+  --gold-10:    rgba(255, 194, 0, 0.10);
+  --gold-20:    rgba(255, 194, 0, 0.20);
+  --red:        #e83535;   /* Globe debris dots → UI critical alerts (less saturated/more premium) */
+  --red-10:     rgba(232, 53, 53, 0.10);
+  --green:      #2ed87a;   /* Globe payload dots → UI nominal/safe */
+  --green-10:   rgba(46, 216, 122, 0.10);
+  --orange:     #ff6820;   /* Globe warning → UI elevated */
+  --blue:       #4488ff;   /* Globe info → UI guarded */
+
+  /* Agent identity — distinct, non-overlapping */
+  --sentinel:   #2ed87a;   /* Same as globe payload green */
+  --analyst:    #4488ff;
+  --commander:  #ffc200;   /* Same as globe atmosphere gold */
+  --herald:     #c084fc;
+
+  /* === MOTION === */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ms-0: 60ms;
+  --ms-1: 150ms;
+  --ms-2: 280ms;
+  --ms-3: 500ms;
+  --ms-4: 800ms;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   height: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-html,
 body {
-  max-width: 100vw;
+  height: 100%;
+  background: var(--bg);
+  color: var(--t0);
+  font-family: 'Rajdhani', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+.mono { font-family: 'Source Code Pro', monospace; }
+
+/* === FIX SCROLLBARS === */
+::-webkit-scrollbar { width: 2px; height: 2px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--b2); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* === KILL DEFAULT INTERACTIVE STYLES === */
+button { font-family: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+input  { font-family: inherit; color: inherit; background: none; border: none; outline: none; }
+a      { color: inherit; text-decoration: none; }
+
+/* === FOCUS RING === */
+:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+/* === PANEL BASE — replace all your card components with this === */
+.panel {
+  background: var(--bg-1);
+  border: 1px solid var(--b1);
+  border-radius: 4px;  /* Sharp. NOT 12px. NOT 16px. 4px max. */
+}
+
+/* === THE GOLD GLOW LINE — use as decorative top border on important panels === */
+.panel-accent {
+  background: var(--bg-1);
+  border: 1px solid var(--b1);
+  border-top: 1px solid var(--gold-20);
+  border-radius: 4px;
+}
+
+/* === SECTION LABEL RULE — labeled horizontal rule === */
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 14px;
+}
+.rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--b1);
+}
+.rule-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--t3);
+  white-space: nowrap;
+}
+
+/* === LIVE PULSE === */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.pulse { animation: pulse 2s ease-in-out infinite; }
+
+/* === DEFCON ALERT FLICKER === */
+@keyframes flicker { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.critical-flicker { animation: flicker 1.6s ease-in-out infinite; }
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+}
+
+/* === PRESERVED/UTILITY STYLES === */
+.scrollable {
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Panel slide-in from right */
+@keyframes slide-in-right {
+  from { transform: translateX(400px); }
+  to { transform: translateX(0); }
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+/* Fade in with upward motion */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* Drawer slide-up from bottom */
+@keyframes slide-up {
+  from { transform: translateY(55vh); }
+  to { transform: translateY(0); }
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+/* Scrolling ticker */
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* === CRT & RADAR EFFECTS === */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%);
+  background-size: 100% 4px;
+  opacity: 0.35;
+}
+
+.crt-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.75), inset 0 0 300px rgba(255, 194, 0, 0.04);
+}
+
+/* === RADAR SWEEP EFFECT === */
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.radar-sweep-line {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, var(--gold-10) 0%, transparent 12%, transparent 100%);
+  transform-origin: center;
+  animation: radar-sweep 24s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* === HOLOGRAPHIC GLASS SHIMMER === */
+@keyframes glass-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer-hover {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 194, 0, 0.05) 45%, rgba(255, 194, 0, 0.08) 50%, rgba(255, 194, 0, 0.05) 55%, transparent 65%);
+  background-size: 200% 100%;
+  background-position: -200% 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+.shimmer-hover:hover::after {
+  opacity: 1;
+  animation: glass-shimmer 1.8s ease-in-out infinite;
+}
+
+/* === GLOW/PULSE HAZARD INDICATOR === */
+@keyframes hazard-pulse {
+  0%, 100% {
+    box-shadow: 0 0 6px var(--red-10), inset 0 0 2px var(--red-10);
+    border-color: rgba(255, 48, 48, 0.3);
   }
+  50% {
+    box-shadow: 0 0 16px rgba(255, 48, 48, 0.35), inset 0 0 8px rgba(255, 48, 48, 0.15);
+    border-color: rgba(255, 48, 48, 0.7);
+  }
+}
+.hazard-glow {
+  animation: hazard-pulse 2s ease-in-out infinite !important;
+}
+
+@keyframes scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
 }
