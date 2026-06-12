@@ -69,7 +69,7 @@ Provide full risk quantification and DEFCON assignment.`;
   const text = await generateContentSafe(userMessage, {
     systemInstruction: ANALYST_SYSTEM_PROMPT,
     responseMimeType: 'application/json',
-    timeoutMs: 12000,
+    timeoutMs: 30000,
   });
 
   try {

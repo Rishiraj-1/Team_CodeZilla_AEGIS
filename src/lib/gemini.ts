@@ -31,7 +31,7 @@ export async function generateContentSafe(
   }
 
   const ai = getGeminiClient();
-  const timeout = options.timeoutMs ?? 10000; // 10s default timeout
+  const timeout = options.timeoutMs ?? 30000; // 30s default timeout
   
   // Try models in order of reliability
   const modelsToTry = [MODEL, 'gemini-3.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash'];

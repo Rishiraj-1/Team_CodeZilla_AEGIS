@@ -60,7 +60,7 @@ Generate mission briefing bulletin.`;
   const text = await generateContentSafe(userMessage, {
     systemInstruction: HERALD_SYSTEM_PROMPT,
     responseMimeType: 'application/json',
-    timeoutMs: 10000,
+    timeoutMs: 30000,
   });
 
   try {

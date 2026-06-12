@@ -80,7 +80,7 @@ Generate maneuver recommendation. Identify maneuverable object and compute avoid
   const text = await generateContentSafe(userMessage, {
     systemInstruction: COMMANDER_SYSTEM_PROMPT,
     responseMimeType: 'application/json',
-    timeoutMs: 12000,
+    timeoutMs: 30000,
   });
 
   try {

@@ -62,7 +62,7 @@ Assess this conjunction and provide your sentinel evaluation.`;
   const text = await generateContentSafe(userMessage, {
     systemInstruction: SENTINEL_SYSTEM_PROMPT,
     responseMimeType: 'application/json',
-    timeoutMs: 10000,
+    timeoutMs: 30000,
   });
 
   try {
